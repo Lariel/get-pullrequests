@@ -1,0 +1,26 @@
+{
+  "name": "fetch-pullrequests",
+  "version": "0.1.0",
+  "description": "CLI para buscar pull requests no Azure DevOps",
+  "main": "bin/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lariel/fetch-pullrequests.git"
+  },
+  "homepage": "",
+  "scripts": {
+    "postinstall": "node ./bin/postinstall",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Azure Devops",
+    "Azure Repos",
+    "pull requests",
+    "cli"
+  ],
+  "author": "Lariel",
+  "license": "ISC",
+  "bin": {  
+    "fetch-pullrequests": "./bin/index.js"  
+  }
+}
