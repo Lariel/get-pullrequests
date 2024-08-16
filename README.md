@@ -16,7 +16,9 @@ CLI para buscar pullrequests no Azure DevOps Repos
         module.exports = { REPOS, ORGANIZATION, PROJECT, REVIEWER };
     ```
 
-### Desenvolvimento (instalação local)
+- Configurar uma variável de ambiente com o nome `FETCH_PR` apontando para a pasta onde o arquivo configs.js foi criado.
+
+### Desenvolvimento
 Executar `npm i -g` na raiz do projeto.
 
 ### Instalação global
