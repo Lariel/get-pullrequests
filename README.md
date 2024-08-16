@@ -11,8 +11,9 @@ CLI para buscar pullrequests no Azure DevOps Repos
             "id-do-repo1",
             "id-do-repo2",
             "etc"
-        ]
-        module.exports = { REPOS, ORGANIZATION, PROJECT };
+        ];
+        const REVIEWER = 'NOME DO REVISOR PARA FILTRAR OS PULL REQUESTS'
+        module.exports = { REPOS, ORGANIZATION, PROJECT, REVIEWER };
     ```
 
 ### Desenvolvimento (instalação local)

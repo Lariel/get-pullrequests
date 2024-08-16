@@ -3,9 +3,9 @@ const https = require('https');
 const pat=process.env.AZURE_PAT; //Token gerado no Azure > PAT _usersSettings/tokens
 //console.log('AZURE_PAT: ',pat);
 const token64=Buffer.from(':'+pat).toString('base64');
-const { REPOS, ORGANIZATION, PROJECT } = require(`${process.env.FETCH_PR}/configs`);
+const { REPOS, ORGANIZATION, PROJECT, REVIEWER } = require(`${process.env.FETCH_PR}/configs`);
 const apiVersion='api-version=7.1-preview.1';
-const baseUrl=`https://dev.azure.com/${ORGANIZATION}/${PROJECT}/_apis/git/pullrequests?${apiVersion}`;
+const baseUrl=`https://dev.azure.com/${ORGANIZATION}/${PROJECT}`;
 //console.log('baseUrl: ',baseUrl);
 
 const colVoteWidth = 8;
@@ -17,10 +17,11 @@ const separator = '+'.padEnd(colVoteWidth+1, '-')
     .concat('+'.padEnd(75,'-'));
 
 const Votes = {
-    '0':'NEW',
+    '-10':'RE',
     '-5':'WA',
-    '5':'OK-C',
-    '10':'OK-NC'
+    '0':'NEW',
+    '5':'OK-NC',
+    '10':'ACTIVE'
 }
 
 const reposFilter = REPOS;
@@ -42,16 +43,24 @@ function formatResult(pr) {
     const vote = pr.reviewers[0] ? `|  ${Votes[pr.reviewers[0].vote]}`.padEnd(colVoteWidth, ' ') : `|  ${Votes[0]}`.padEnd(colVoteWidth, ' '); 
     const author = ` | ${ellipsis(pr.createdBy.displayName, colAuthorWidth).padEnd(colAuthorWidth, ' ')}`;
     const title = ` | ${ellipsis(pr.title, colTitleWidth).padEnd(colTitleWidth, ' ')}`;
-    const url = ` | https://dev.azure.com/PUC-RS/PUCRS/_git/${pr.repository.name}/pullrequest/${pr.pullRequestId}`;
+    const url = ` | ${baseUrl}/_git/${pr.repository.name}/pullrequest/${pr.pullRequestId}`;
     console.log(`${vote}${author}${title}${url}`);
     //console.log(pr);
+}
+
+function filterPullRequest(pullRequest) {
+
+    return pullRequest.isDraft == false && (
+        reposFilter.includes(pullRequest.repository.id) || 
+        reposFilter.includes(pullRequest.repository.name) ||
+        pullRequest.reviewers.some(reviewer => reviewer.displayName.includes(REVIEWER))
+    );
 }
 
 function displayResults(jsonBody) {
 
     const pullrequests = jsonBody.value
-        .filter(pr => pr.isDraft == false)
-        .filter(pr => reposFilter.includes(pr.repository.id))
+        .filter(pr => filterPullRequest(pr))
         .sort((a,b) => a.pullRequestId - b.pullRequestId)
         .map(pr => formatResult(pr));
         
@@ -62,7 +71,7 @@ function displayResults(jsonBody) {
 
 function getPullRequests() {
     https.get(
-        baseUrl,
+        `${baseUrl}/_apis/git/pullrequests?${apiVersion}`,
         options, res => {
             let body = '';
             res.on('data', function(chunk) {
