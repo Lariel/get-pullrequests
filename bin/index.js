@@ -103,22 +103,22 @@ function getPullRequests() {
 function handleHelpParam(param) {
 
     const HELP_TEXT = `
-    ------------------------------------------------------------------------------------------------------------------
-    |   Help:                                                                                                         |
-    |       Usage:                                                                                                    |
+    ----------------------------------------------------------------------------------------
+    |   Help:                                                                                                         
+    |       Usage:                                                                                                    
     |           $ fetch-pullrequests
-    |                                                                                                                 |
-    |           Options:                                                                                              |
-    |               ${P_HELP.value}             ${P_HELP.helpText}                                               [${P_HELP.type}]          |
-    |               ${P_VERSION.value}          ${P_VERSION.helpText}                                     [${P_VERSION.type}]          |
-    |               ${P_DEBUG.value}            ${P_DEBUG.helpText}                         [${P_DEBUG.type}]          |
-    |                                                                                                                 |
-    |      Configs found:                                                                                             |
-    |           Repos: ${reposFilter.length}                                                                                       |
-    |           Revisor: ${REVIEWER}                                                                                               |
-    |                                                                                                                 |
-    |                                                                                                                 |
-    ------------------------------------------------------------------------------------------------------------------
+    |                                                                                                                 
+    |           Options:                                                                                              
+    |               ${P_HELP.values}             ${P_HELP.helpText}                                               
+    |               ${P_VERSION.values}          ${P_VERSION.helpText}                       
+    |               ${P_DEBUG.values}               ${P_DEBUG.helpText}                        
+    |                                                                                                                 
+    |      Configs found:                                                                                             
+    |           Repos: ${reposFilter.length}                                                                                       
+    |           Revisor: ${REVIEWER ? REVIEWER : 'Não configurado no arquivo'} ${process.env.FETCH_PR}/configs.js
+    |                                                                                                                 
+    |                                                                                                                 
+    ----------------------------------------------------------------------------------------
     `
 
     const doHelp = () => {
@@ -159,9 +159,7 @@ function handleParams(paramsList) {
         handleDebugParam(param);
     });
 
-    if (((!envParam && !serviceParam) || (tagParam && serviceParam)) 
-        && !helpParam && !versionParam) {
-        console.error(INVALID_PARAMS +GREETINGS);
+    if (helpParam || versionParam) {
         return;
     }
 
