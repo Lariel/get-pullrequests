@@ -26,3 +26,4 @@ Executar `npm i -g fetch-pullrequests` para instalar o projeto.
 
 ### Execução
 Após a instalação global, executar `fetch-pullrequests` em qualquer local.
+Executar `fetch-pullrequests -h` para obter ajuda.
