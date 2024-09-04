@@ -10,11 +10,12 @@ const INVALID_PARAMS = `Invalid params.`;
 
 const colVoteWidth = 8;
 const colAuthorWidth = 20;
+const colBranchWidth = 50;
 const colTitleWidth = 50;
 const separator = '+'.padEnd(colVoteWidth+1, '-')
     .concat('+'.padEnd(colAuthorWidth+3, '-'))
-    .concat('+'.padEnd(colTitleWidth+3, '-'))
-    .concat('+'.padEnd(colTitleWidth+3, '-'))
+    .concat('+'.padEnd(colBranchWidth+3, '-'))
+    .concat('+'.padEnd(colBranchWidth+3, '-'))
     .concat('+'.padEnd(colTitleWidth+3, '-'))
     .concat('+'.padEnd(75,'-'));
 
@@ -58,8 +59,8 @@ function formatResult(pr) {
     } else {
         const vote = pr.reviewers[0] ? `|  ${Votes[pr.reviewers[0].vote]}`.padEnd(colVoteWidth, ' ') : `|  ${Votes[0]}`.padEnd(colVoteWidth, ' '); 
         const author = ` | ${ellipsis(pr.createdBy.displayName, colAuthorWidth).padEnd(colAuthorWidth, ' ')}`;
-        const sourceBranch = formatBranchName(pr.sourceRefName);
-        const targetBranch = formatBranchName(pr.targetRefName);
+        const sourceBranch = ` | ${ellipsis(formatBranchName(pr.sourceRefName), colBranchWidth).padEnd(colBranchWidth, ' ')}`;
+        const targetBranch = ` | ${ellipsis(formatBranchName(pr.targetRefName), colBranchWidth).padEnd(colBranchWidth, ' ')}`;
         const title = ` | ${ellipsis(pr.title, colTitleWidth).padEnd(colTitleWidth, ' ')}`;
         const url = ` | ${baseUrl}/_git/${pr.repository.name}/pullrequest/${pr.pullRequestId}`;
         console.log(`${vote}${author}${sourceBranch}${targetBranch}${title}${url}`);
@@ -99,7 +100,12 @@ function getPullRequests() {
                 const jsonBody = JSON.parse(body);
                 //console.log('body: ', jsonBody);
                 console.log(separator);
-                const tableHead = '| STATUS'.padEnd(colVoteWidth, ' ').concat(' | AUTOR'.padEnd(colAuthorWidth+3, ' ')).concat(' | TITULO'.padEnd(colTitleWidth+3, ' ')).concat(' | LINK');
+                const tableHead = '| STATUS'.padEnd(colVoteWidth, ' ')
+                    .concat(' | ORIGEM'.padEnd(colBranchWidth+3, ' '))
+                    .concat(' | DESTINO'.padEnd(colBranchWidth+3, ' '))
+                    .concat(' | AUTOR'.padEnd(colAuthorWidth+3, ' '))
+                    .concat(' | TITULO'.padEnd(colTitleWidth+3, ' '))
+                    .concat(' | LINK');
                 console.log(tableHead);
                 displayResults(jsonBody);
             });
