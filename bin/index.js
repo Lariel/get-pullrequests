@@ -10,7 +10,7 @@ const INVALID_PARAMS = `Invalid params.`;
 
 const colVoteWidth = 8;
 const colAuthorWidth = 20;
-const colBranchWidth = 50;
+const colBranchWidth = 40;
 const colTitleWidth = 50;
 const separator = '+'.padEnd(colVoteWidth+1, '-')
     .concat('+'.padEnd(colAuthorWidth+3, '-'))
@@ -101,9 +101,9 @@ function getPullRequests() {
                 //console.log('body: ', jsonBody);
                 console.log(separator);
                 const tableHead = '| STATUS'.padEnd(colVoteWidth, ' ')
+                    .concat(' | AUTOR'.padEnd(colAuthorWidth+3, ' '))
                     .concat(' | ORIGEM'.padEnd(colBranchWidth+3, ' '))
                     .concat(' | DESTINO'.padEnd(colBranchWidth+3, ' '))
-                    .concat(' | AUTOR'.padEnd(colAuthorWidth+3, ' '))
                     .concat(' | TITULO'.padEnd(colTitleWidth+3, ' '))
                     .concat(' | LINK');
                 console.log(tableHead);
