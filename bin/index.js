@@ -1,15 +1,11 @@
 #! /usr/bin/env node
 const https = require('https');
-const pat=process.env.AZURE_PAT; //Token gerado no Azure > PAT _usersSettings/tokens
 const versionInfo = require('../package').version;
-//console.log('AZURE_PAT: ',pat);
-const token64=Buffer.from(':'+pat).toString('base64');
 const { P_HELP, P_VERSION, P_DEBUG } = require('./params');
-const { REPOS, ORGANIZATION, PROJECT, REVIEWER } = require(`${process.env.FETCH_PR}/configs`);
+const { AZURE_PAT, REPOS, ORGANIZATION, PROJECT, REVIEWER } = require(`${process.env.FETCH_PR}/configs`);
 const paramsList = process.argv.slice(2);
 const apiVersion='api-version=7.1-preview.1';
 const baseUrl=`https://dev.azure.com/${ORGANIZATION}/${PROJECT}`;
-//console.log('baseUrl: ',baseUrl);
 const INVALID_PARAMS = `Invalid params.`;
 
 const colVoteWidth = 8;
@@ -27,6 +23,9 @@ const Votes = {
     '5':'OK-NC',
     '10':'ACTIVE'
 }
+
+const pat = AZURE_PAT;
+const token64=Buffer.from(':'+pat).toString('base64');
 
 const reposFilter = REPOS;
 
@@ -48,13 +47,13 @@ function ellipsis(text, limit) {
 }
 
 function formatResult(pr) {
-    const vote = pr.reviewers[0] ? `|  ${Votes[pr.reviewers[0].vote]}`.padEnd(colVoteWidth, ' ') : `|  ${Votes[0]}`.padEnd(colVoteWidth, ' '); 
-    const author = ` | ${ellipsis(pr.createdBy.displayName, colAuthorWidth).padEnd(colAuthorWidth, ' ')}`;
-    const title = ` | ${ellipsis(pr.title, colTitleWidth).padEnd(colTitleWidth, ' ')}`;
-    const url = ` | ${baseUrl}/_git/${pr.repository.name}/pullrequest/${pr.pullRequestId}`;
     if (debugParam){
         console.log(pr);
     } else {
+        const vote = pr.reviewers[0] ? `|  ${Votes[pr.reviewers[0].vote]}`.padEnd(colVoteWidth, ' ') : `|  ${Votes[0]}`.padEnd(colVoteWidth, ' '); 
+        const author = ` | ${ellipsis(pr.createdBy.displayName, colAuthorWidth).padEnd(colAuthorWidth, ' ')}`;
+        const title = ` | ${ellipsis(pr.title, colTitleWidth).padEnd(colTitleWidth, ' ')}`;
+        const url = ` | ${baseUrl}/_git/${pr.repository.name}/pullrequest/${pr.pullRequestId}`;
         console.log(`${vote}${author}${title}${url}`);
     }
 }
