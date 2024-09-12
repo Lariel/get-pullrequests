@@ -8,16 +8,17 @@ const apiVersion='api-version=7.1-preview.1';
 const baseUrl=`https://dev.azure.com/${ORGANIZATION}/${PROJECT}`;
 const INVALID_PARAMS = `Invalid params.`;
 
-const colVoteWidth = 8;
+const colVoteWidth = 11;
 const colAuthorWidth = 20;
-const colBranchWidth = 40;
+const colBranchSourceWidth = 40;
+const colBranchTargetWidth = 20;
 const colTitleWidth = 50;
 const separator = '+'.padEnd(colVoteWidth+1, '-')
     .concat('+'.padEnd(colAuthorWidth+3, '-'))
-    .concat('+'.padEnd(colBranchWidth+3, '-'))
-    .concat('+'.padEnd(colBranchWidth+3, '-'))
+    .concat('+'.padEnd(colBranchSourceWidth+3, '-'))
+    .concat('+'.padEnd(colBranchTargetWidth+3, '-'))
     .concat('+'.padEnd(colTitleWidth+3, '-'))
-    .concat('+'.padEnd(75,'-'));
+    .concat('+'.padEnd(80,'-'));
 
 const Votes = {
     '-10':'RE',
@@ -59,8 +60,8 @@ function formatResult(pr) {
     } else {
         const vote = pr.reviewers[0] ? `|  ${Votes[pr.reviewers[0].vote]}`.padEnd(colVoteWidth, ' ') : `|  ${Votes[0]}`.padEnd(colVoteWidth, ' '); 
         const author = ` | ${ellipsis(pr.createdBy.displayName, colAuthorWidth).padEnd(colAuthorWidth, ' ')}`;
-        const sourceBranch = ` | ${ellipsis(formatBranchName(pr.sourceRefName), colBranchWidth).padEnd(colBranchWidth, ' ')}`;
-        const targetBranch = ` | ${ellipsis(formatBranchName(pr.targetRefName), colBranchWidth).padEnd(colBranchWidth, ' ')}`;
+        const sourceBranch = ` | ${ellipsis(formatBranchName(pr.sourceRefName), colBranchSourceWidth).padEnd(colBranchWidth, ' ')}`;
+        const targetBranch = ` | ${ellipsis(formatBranchName(pr.targetRefName), colBranchTargetWidth).padEnd(colBranchWidth, ' ')}`;
         const title = ` | ${ellipsis(pr.title, colTitleWidth).padEnd(colTitleWidth, ' ')}`;
         const url = ` | ${baseUrl}/_git/${pr.repository.name}/pullrequest/${pr.pullRequestId}`;
         console.log(`${vote}${author}${sourceBranch}${targetBranch}${title}${url}`);
@@ -102,8 +103,8 @@ function getPullRequests() {
                 console.log(separator);
                 const tableHead = '| STATUS'.padEnd(colVoteWidth, ' ')
                     .concat(' | AUTOR'.padEnd(colAuthorWidth+3, ' '))
-                    .concat(' | ORIGEM'.padEnd(colBranchWidth+3, ' '))
-                    .concat(' | DESTINO'.padEnd(colBranchWidth+3, ' '))
+                    .concat(' | ORIGEM'.padEnd(colBranchSourceWidth+3, ' '))
+                    .concat(' | DESTINO'.padEnd(colBranchTargetWidth+3, ' '))
                     .concat(' | TITULO'.padEnd(colTitleWidth+3, ' '))
                     .concat(' | LINK');
                 console.log(tableHead);
