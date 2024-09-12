@@ -60,8 +60,8 @@ function formatResult(pr) {
     } else {
         const vote = pr.reviewers[0] ? `|  ${Votes[pr.reviewers[0].vote]}`.padEnd(colVoteWidth, ' ') : `|  ${Votes[0]}`.padEnd(colVoteWidth, ' '); 
         const author = ` | ${ellipsis(pr.createdBy.displayName, colAuthorWidth).padEnd(colAuthorWidth, ' ')}`;
-        const sourceBranch = ` | ${ellipsis(formatBranchName(pr.sourceRefName), colBranchSourceWidth).padEnd(colBranchWidth, ' ')}`;
-        const targetBranch = ` | ${ellipsis(formatBranchName(pr.targetRefName), colBranchTargetWidth).padEnd(colBranchWidth, ' ')}`;
+        const sourceBranch = ` | ${ellipsis(formatBranchName(pr.sourceRefName), colBranchSourceWidth).padEnd(colBranchSourceWidth, ' ')}`;
+        const targetBranch = ` | ${ellipsis(formatBranchName(pr.targetRefName), colBranchTargetWidth).padEnd(colBranchTargetWidth, ' ')}`;
         const title = ` | ${ellipsis(pr.title, colTitleWidth).padEnd(colTitleWidth, ' ')}`;
         const url = ` | ${baseUrl}/_git/${pr.repository.name}/pullrequest/${pr.pullRequestId}`;
         console.log(`${vote}${author}${sourceBranch}${targetBranch}${title}${url}`);
